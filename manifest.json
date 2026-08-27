@@ -1,0 +1,10 @@
+{
+  "domain": "meshcore_observer",
+  "name": "Meshcore observer",
+  "version": "1.0",
+  "config_flow": true,
+  "documentation": "https://github.com/vakarianplay/MeshCore_vbart_HA",
+  "requirements": [],
+  "codeowners": [],
+  "iot_class": "local_polling"
+}
