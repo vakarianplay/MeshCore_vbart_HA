@@ -1,75 +1,80 @@
-# Meshcore Observer for Home Assistant
 
-Home Assistant custom integration for monitoring a Meshcore observer node with [Vbart's firmware](https://github.com/VBart/MeshCoreTel-firmware) for Meshcoretel.ru.
+# Meshcore Observer for Home Assistant <img src="https://brands.home-assistant.io/_/homeassistant/icon.png" alt="Home Assistant" width="80"/> <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/webp/meshcore.webp" alt="Meshcore" width="80"/>
 
-------------------------------
+![alt text](https://img.shields.io/badge/Home%20Assistant-Custom%20Integration-41BDF5?style=flat-square&logo=homeassistant)
+![alt text](https://img.shields.io/badge/HACS-Compatible-8A2BE2?style=flat-square&logo=homeassistantcommunitystore)
+![alt text](https://img.shields.io/badge/Meshcore-Observer-darkblue?style=flat-square&logo=traefikmesh)
+![alt text](https://img.shields.io/badge/API-meshcoretel.ru-darkblue?style=flat-square&logo=traefikmesh)
 
-> Vbart's Meshcore firmware [https://github.com/VBart/MeshCoreTel-firmware](https://github.com/VBart/MeshCoreTel-firmware)
->
-> MeshCoreTel [https://meshcoretel.ru](https://meshcoretel.ru)
+![alt text](https://img.shields.io/badge/Status-in%20progress-2E8B57?style=for-the-badge&logo=Buddy)
 
------------------
+### Integration for Home Assistant to monitor Vbart's Meshcore repeater via `/login` + `/api/stats`
+Fetches telemetry from Meshcore repeater with [Vbart's Meshcore firmware](https://github.com/VBart/MeshCoreTel-firmware) and enriches neighbors data from [meshcoretel.ru](https://meshcoretel.ru).
 
-The integration connects to your node API, authenticates via `/login`, fetches `/api/stats`, and creates sensors for selected blocks (`radio`, `packets`, `wifi`, `services`, `history`, `archive`, `core`, `memory`, `sensors`, `neighbors_detail`).
 
-For neighbors, it can enrich data from:
-
-- `https://meshcoretel.ru/api/observers/<full_id>`
-- fallback: `https://meshcoretel.ru/api/nodes/<full_id>/repeater-dashboard`
+<img width="400" alt="meshcore_card_1" src="https://github.com/user-attachments/assets/c74ae78e-e425-4a13-9052-ce98bb590b60" />
+<img width="400" alt="meshcore_card_2" src="https://github.com/user-attachments/assets/337e58e7-5095-4035-b8f4-a45261a8072a" />
 
 ---
 
-## Features
+## 🛠️ Releases
 
-- UI setup (Config Flow)
-- Configurable update interval (minimum 120 seconds)
-- SSL options:
-  - verify SSL on/off
-  - legacy/insecure TLS mode
-- Select which blocks to expose
-- Neighbors list sensor with optional enrichment
-- Single device in Home Assistant: **Meshcore Observer**
+[![Добавить интеграцию в Home Assistant](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=meshcore_observer)
+
+[![Добавить репозиторий в HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=<YOUR_GITHUB>&repository=<YOUR_REPO>&category=integration)
+
+> HACS / GitHub Releases:  
+> [https://github.com/<YOUR_GITHUB>/meshcore_observer/releases](https://github.com/<YOUR_GITHUB>/meshcore_observer/releases)
 
 ---
 
-## Installation
+## 💎 Features
 
-### Option 1: HACS (Custom Repository)
-
-1. Open **HACS** → **Integrations**.
-2. Click the 3-dot menu → **Custom repositories**.
-3. Add your repository URL.
-4. Category: **Integration**.
-5. Install **Meshcore Observer**.
-6. Restart Home Assistant.
-7. 
-
-### Option 2: Manual
-
-1. Copy `custom_components/meshcore_observer` to your HA config folder:
-   - `/config/custom_components/meshcore_observer`
-2. Restart Home Assistant.
-
----
-
-## Configuration (UI)
-
-Go to:
-
-**Settings → Devices & Services → Add Integration → Meshcore Observer**
-
-Fill in:
-
-- **Base URL** (example: `https://192.168.1.123` or `http://zero.lan:1484`)
-- **Password**
-- **Update interval** (>= 120 sec)
-- **Verify SSL**
-- **Legacy TLS mode**
-- **Blocks to include**
+>* UI setup via Config Flow (без YAML)
+>* Auth flow: `POST /login` → token → `GET /api/stats`
+>* Configurable update interval (**min 120 sec**)
+>* SSL options:
+>   * Verify SSL on/off
+>   * Legacy TLS mode
+>* Block selection in settings:
+>   * `history`
+>   * `archive`
+>   * `core`
+>   * `radio`
+>   * `packets`
+>   * `memory`
+>   * `wifi`
+>   * `services`
+>   * `sensors`
+>   * `neighbors_detail`
+>* Neighbor enrichment by `full_id`:
+>   * `https://meshcoretel.ru/api/observers/<full_id>`
+>   * fallback: `https://meshcoretel.ru/api/nodes/<full_id>/repeater-dashboard`
+>* Rate-limit protection:
+>   * cache
+>   * backoff on HTTP 429
+>   * controlled enrichment per update cycle
+>* Separate entity for dashboard card: **Neighbors List**
 
 ---
 
-## Node API flow used
+## 🚀 How to start
+
+>* Install via **HACS** (Custom repository) or manually
+>* Restart Home Assistant
+>* Go to **Settings → Devices & Services → Add Integration**
+>* Choose **Meshcore Observer**
+>* Fill:
+>   * Base URL (`http://...` or `https://...`)
+>   * Password
+>   * Scan interval (>=120)
+>   * SSL options
+>   * Enabled blocks
+>* Save and open created device/entities
+
+---
+
+## ⚙️ API Example
 
 ```bash
 BASE_URL="https://192.168.1.123"
@@ -77,75 +82,47 @@ PASSWORD="your-admin-password"
 
 TOKEN=$(curl -sk -X POST "$BASE_URL/login" --data "$PASSWORD")
 
-curl -sk "$BASE_URL/api/stats" -H "X-Auth-Token: $TOKEN"
+echo "Сводка:"
+curl -sk "$BASE_URL/api/stats" \
+  -H "X-Auth-Token: $TOKEN"
 ```
 
 ---
 
-## Sensors created
+## 📳 Entities
 
-Depending on selected blocks, integration creates sensors like:
-
-- `Meshcore Status`
-- `SNR`, `RSSI`
-- `WiFi SSID`, `WiFi RSSI`
-- `Packets RX`, `Packets TX`
-- `MQTT`
-- `Core Uptime`, `Core Errors`
-- `Heap Free`
-- `MCU Temp`
-- `History Events`
-- `Archive Available`
-- `Neighbors List`
-
-`Neighbors List` includes attribute `neighbors` with entries:
-
-- `id`
-- `full_id`
-- `observer`
-- `model`
-- `last_message_at`
-- `snr_db`
+>* `sensor.meshcore_observer_status`
+>* `sensor.meshcore_observer_snr`
+>* `sensor.meshcore_observer_rssi`
+>* `sensor.meshcore_observer_wifi_ssid`
+>* `sensor.meshcore_observer_wifi_rssi`
+>* `sensor.meshcore_observer_packets_rx`
+>* `sensor.meshcore_observer_packets_tx`
+>* `sensor.meshcore_observer_mqtt`
+>* `sensor.meshcore_observer_neighbors_list` (+ `neighbors` attributes for card)
 
 ---
 
-## Neighbors enrichment
+## 👥 Neighbors fields
 
-When `neighbors_detail` block is enabled, integration tries to resolve:
+For each neighbor in `neighbors`:
 
-1. `https://meshcoretel.ru/api/observers/<full_id>`
-2. fallback `https://meshcoretel.ru/api/nodes/<full_id>/repeater-dashboard`
-
-If external API is rate-limited (`HTTP 429`), integration applies back off and cache.
-
----
-
-## Known limitations
-
-- External API (`meshcoretel.ru`) may return `429 Too Many Requests`.
-- During backoff, some neighbor fields can temporarily remain `null`.
-- Some node firmware/API variants may differ in login/token response format.
+>* `id`
+>* `full_id`
+>* `observer`
+>* `model`
+>* `last_message_at`
+>* `snr_db`
 
 ---
 
-## Recommended settings
-
-- Update interval: `300`–`900` seconds
-- Enable only needed blocks
-- If local TLS is self-signed/broken:
-  - `Verify SSL = false`
-  - `Legacy TLS mode = true`
-- If node is plain HTTP, use `http://...` URL
-
----
-
-## Example Lovelace card (Neighbors)
+## 🧩 Example Lovelace Card (Neighbors)
 
 ```yaml
 type: markdown
 title: 👥 Meshcore · Соседи
 content: >
-  {% set ent = 'sensor.mo_est_mqtt_07_neighbors_list' %}
+  {% set ent = 'sensor.meshcore_observer_neighbors_list' %}
   {% set rows = state_attr(ent, 'neighbors') or [] %}
   {% if rows | count == 0 %}
   _Нет данных по соседям_
@@ -153,9 +130,11 @@ content: >
   **Всего:** {{ rows|count }}
   ---
   {% for n in rows | sort(attribute='snr_db', reverse=True) %}
-  **{{ n.id }} — {{ n.observer if n.observer else 'unknown' }}**
-  {{ n.model if n.model else 'repeater' }}
-  SNR: {{ n.snr_db }} dB
+  {% set snr = (n.snr_db if n.snr_db is not none else -999) | float %}
+  {% set mark = '🟢' if snr >= 5 else ('🟡' if snr >= 0 else '🔴') %}
+  **{{ mark }} {{ n.id }} — {{ n.observer if n.observer else 'unknown' }}**
+  {{ (n.model if n.model else 'repeater') }}
+  SNR: {{ '%.2f'|format(snr) }} dB
   {{ n.last_message_at if n.last_message_at else 'unknown' }}
   ---
   {% endfor %}
@@ -164,26 +143,25 @@ content: >
 
 ---
 
-## Troubleshooting
+## ⚠️ Troubleshooting
 
-### Integration adds but sensors are unavailable
-- Check node URL/protocol (`http` vs `https`)
-- Check password
-- Try disabling SSL verification
-- Check HA logs:
-  - **Settings → System → Logs**
-  - Search for `meshcore_observer`
+>* `SSLV3_ALERT_HANDSHAKE_FAILURE`  
+>  → try `http://` URL, or disable Verify SSL + enable Legacy TLS
+>* `HTTP 429` from meshcoretel  
+>  → increase interval (`300-900s`), enrichment runs gradually with backoff
+>* `unknown` in neighbors fields  
+>  → wait for enrichment cycle / check meshcoretel availability from HA container
+>* entities `unavailable`  
+>  → check credentials, node URL, and HA logs
 
-### Neighbors show unknown fields
-- External enrichment API may be rate-limited (`429`)
-- Wait until backoff expires
-- Increase update interval
+---
 
-### SSL handshake failure
-- Use `http://` if node is not true HTTPS
-- Or set:
-  - `Verify SSL = false`
-  - `Legacy TLS mode = true`
+## 📑 Dependencies
 
-MIT
-```
+>* Home Assistant Core
+>* aiohttp (bundled with HA)
+>* Custom integration API (DataUpdateCoordinator, ConfigFlow)
+
+
+
+[![Добавить репозиторий в HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=<YOUR_GITHUB>&repository=<YOUR_REPO>&category=integration)
