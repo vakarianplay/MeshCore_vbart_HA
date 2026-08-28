@@ -1,0 +1,10 @@
+{
+  "domain": "meshcore_observer",
+  "name": "Meshcore observer (vbart_firmware)",
+  "version": "2.1",
+  "config_flow": true,
+  "documentation": "http://lost.vakarian.website:9875/moestmqtt07",
+  "requirements": [],
+  "codeowners": [],
+  "iot_class": "local_polling"
+}

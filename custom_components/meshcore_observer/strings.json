@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Meshcore Observer",
+        "description": "Настройка подключения",
+        "data": {
+          "base_url": "Base URL",
+          "password": "Password",
+          "scan_interval": "Update interval (sec)",
+          "verify_ssl": "Verify SSL",
+          "insecure_tls": "Legacy TLS mode",
+          "blocks": "Blocks"
+        }
+      }
+    }
+  }
+}

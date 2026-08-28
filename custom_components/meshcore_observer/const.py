@@ -1,0 +1,37 @@
+DOMAIN = "meshcore_observer"
+
+CONF_BASE_URL = "base_url"
+CONF_PASSWORD = "password"
+CONF_SCAN_INTERVAL = "scan_interval"
+CONF_VERIFY_SSL = "verify_ssl"
+CONF_INSECURE_TLS = "insecure_tls"
+CONF_BLOCKS = "blocks"
+
+DEFAULT_SCAN_INTERVAL = 300
+MIN_SCAN_INTERVAL = 120
+DEFAULT_VERIFY_SSL = False
+DEFAULT_INSECURE_TLS = True
+
+BLOCK_HISTORY = "history"
+BLOCK_ARCHIVE = "archive"
+BLOCK_CORE = "core"
+BLOCK_RADIO = "radio"
+BLOCK_PACKETS = "packets"
+BLOCK_MEMORY = "memory"
+BLOCK_WIFI = "wifi"
+BLOCK_SERVICES = "services"
+BLOCK_SENSORS = "sensors"
+BLOCK_NEIGHBORS = "neighbors_detail"
+
+ALL_BLOCKS = [
+    BLOCK_HISTORY,
+    BLOCK_ARCHIVE,
+    BLOCK_CORE,
+    BLOCK_RADIO,
+    BLOCK_PACKETS,
+    BLOCK_MEMORY,
+    BLOCK_WIFI,
+    BLOCK_SERVICES,
+    BLOCK_SENSORS,
+    BLOCK_NEIGHBORS,
+]
