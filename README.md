@@ -11,16 +11,17 @@
 ### Integration for Home Assistant to monitor Vbart's Meshcore repeater via `/login` + `/api/stats`
 Fetches telemetry from Meshcore repeater with [Vbart's Meshcore firmware](https://github.com/VBart/MeshCoreTel-firmware) and enriches neighbors data from [meshcoretel.ru](https://meshcoretel.ru).
 
+<img width="400" alt="изображение" src="https://github.com/user-attachments/assets/8931e0ee-aeba-44b2-9675-afc8a8083aab" />
+<img width="400" alt="изображение" src="https://github.com/user-attachments/assets/7f12f27d-a26f-44d3-b247-202c77e08205" />
 
-<img width="400" alt="meshcore_card_1" src="https://github.com/user-attachments/assets/c74ae78e-e425-4a13-9052-ce98bb590b60" />
-<img width="400" alt="meshcore_card_2" src="https://github.com/user-attachments/assets/337e58e7-5095-4035-b8f4-a45261a8072a" />
+
+
 
 ---
 
 ## 🛠️ Releases
 
 [![Добавить интеграцию в Home Assistant](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=meshcore_observer)
-
 [![Добавить репозиторий в HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=<YOUR_GITHUB>&repository=<YOUR_REPO>&category=integration)
 
 > HACS / GitHub Releases:  
@@ -75,6 +76,8 @@ Fetches telemetry from Meshcore repeater with [Vbart's Meshcore firmware](https:
 ---
 
 ## ⚙️ API Example
+
+[Source from VBart's repo](https://github.com/VBart/MeshCoreTel-firmware/blob/main/meshcoretel-docs/api.md)
 
 ```bash
 BASE_URL="https://192.168.1.123"
